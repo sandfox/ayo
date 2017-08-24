@@ -4,8 +4,14 @@ compiler:
 os:
   - linux
 sudo: false
-cache: ccache
+cache:
+  ccache: true
+  directories:
+    - .mtimecache
 before_install:
+  # mtime_cache - modified version of https://github.com/iboB/mtime_cache to use sha256
+  # re-adds the mtime for files so eslint caches work (git does not store mtime data).
+  - ./tools/mtime_cache 'src/*.cpp' -c .mtimecache/cache.json
   - export CXX="ccache clang++ -Qunused-arguments"
   - export CC="ccache clang -Qunused-arguments"
   - export JOBS=2
